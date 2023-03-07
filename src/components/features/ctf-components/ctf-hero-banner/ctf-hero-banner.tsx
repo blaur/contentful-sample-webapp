@@ -1,6 +1,7 @@
 import { Container, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import clsx from 'clsx';
+import Image from 'next/image';
 import { useMemo } from 'react';
 
 import { HeroBannerFieldsFragment } from './__generated/ctf-hero-banner.generated';
@@ -100,6 +101,7 @@ export const CtfHeroBanner = (props: HeroBannerFieldsFragment) => {
     headline,
     // Tutorial: uncomment the line below to make the Greeting field available to render
     // greeting,
+    digizuiteImage,
     bodyText,
     ctaText,
     targetPage,
@@ -112,14 +114,13 @@ export const CtfHeroBanner = (props: HeroBannerFieldsFragment) => {
   const imageStyle = imageStyleBoolean ? 'partial' : 'full';
   const heroSize =
     heroSizeBoolean === null || heroSizeBoolean === true ? 'full_screen' : 'fixed_height';
-  const backgroundImage = useMemo(
-    () =>
-      image
-        ? `${image.url}?w=${imageStyle === 'partial' ? 767 * 2 : layout.containerWidth * 2}`
-        : undefined,
-    [image, imageStyle, layout.containerWidth],
-  );
+
+  const digiUrl =
+    digizuiteImage && digizuiteImage.length > 0 ? digizuiteImage[0].downloadUrl : image?.url;
+  const backgroundImage = useMemo(() => (digiUrl ? `${digiUrl}` : undefined), [digiUrl]);
+  console.log(backgroundImage);
   const classes = useStyles();
+  console.log('image style', imageStyle);
   return (
     <Container
       maxWidth={false}
@@ -128,7 +129,8 @@ export const CtfHeroBanner = (props: HeroBannerFieldsFragment) => {
         backgroundImage:
           imageStyle === 'full' && backgroundImage ? `url(${backgroundImage!})` : undefined,
         backgroundColor: colorConfig.backgroundColor,
-      }}>
+      }}
+    >
       {imageStyle === 'partial' && backgroundImage && (
         <div className={classes.partialBgContainer}>
           <div
@@ -151,7 +153,8 @@ export const CtfHeroBanner = (props: HeroBannerFieldsFragment) => {
           <Typography
             variant="h1"
             className={classes.headline}
-            style={{ color: colorConfig.headlineColor }}>
+            style={{ color: colorConfig.headlineColor }}
+          >
             {headline}
           </Typography>
         )}
@@ -168,7 +171,8 @@ export const CtfHeroBanner = (props: HeroBannerFieldsFragment) => {
               page={targetPage}
               variant="contained"
               color={colorConfig.buttonColor}
-              isButton>
+              isButton
+            >
               {ctaText}
             </PageLink>
           </div>

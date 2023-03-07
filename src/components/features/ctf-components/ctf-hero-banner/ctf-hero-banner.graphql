@@ -17,6 +17,7 @@ fragment HeroBannerFields on ComponentHeroBanner {
   image {
     ...AssetFields
   }
+  digizuiteImage
   imageStyle
   heroSize
   colorPalette
